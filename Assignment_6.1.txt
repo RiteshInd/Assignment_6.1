@@ -2,12 +2,10 @@
 Perform the below operations:
 
 
-library(readr) 
-bank_full <- read_delim("D:/R/bank-full.csv", ";", escape_double = FALSE, trim_ws = TRUE)
-str(bank_full)
-
-
 a. Create a visual for representing missing values in the dataset.
+
+bank_full <- read.csv("D:/R/bank-full.csv", header=TRUE, sep=";")
+str(bank_full)
 
 require(Amelia)
 missmap(bank_full,main="Missing Data - Bank ", 
@@ -16,47 +14,43 @@ summary(bank_full)
 
 ## No red colour stripes are visible. hence no missing values.
 
+
+
+
 b. Show a distribution of clients based on a Job.
 
-## Barplots for Categorical Variables 
-barplot(table(bank_full$job),col="red",main="JOB")
-barplot(table(bank_full$marital),col="green",main="Marital")
-barplot(table(bank_full$education),col="blue",main="Education")
+bank_full <- read.csv("D:/R/bank-full.csv", header= TRUE, sep = ";")
+bank_full_1 <- table(bank_full$job)
 
-par(oma=c(2,0,0,0)) #so labels are not cut off 
-barplot(table(bank_full$job),ylab = "Frequency", main = "bank_full$job", 
-	border="black", col="grey",las=2)
+# Distribution in tabular form
+bank_full_1
 
-#Histogram for job,marital and education - three categorical variables 
-par(oma=c(2,0,0,0)) #so labels are not cut off 
-barplot(table(bank_full$job),ylab = "Frequency", main = "bank_full$job", 
-	border="yellow", col="violet",las=2)
+# visual representation of distribution
+barplot(bank_full_1,xlab="Job",ylab = "Frequency", main = "Clients based on Job", border="black", 
+                 col=heat.colors(15),las=3)
 
-par(oma=c(2,0,0,0)) #so labels are not cut off 
-barplot(table(bank_full$marital),ylab = "Frequency", main = "bank_full$marital", 
-	border="green", col="yellow",las=2)
-
-par(oma=c(2,0,0,0)) #so labels are not cut off 
-barplot(table(bank_full$education),ylab = "Frequency", main = "bank_full$education", 
-	border="red", col="blue",las=2)
 
 
 
 c. Check whether is there any relation between Job and Marital Status?
 
+As both are a categorical variable this can be checked with chisq.test 
 
-# As both are a categorical variable this can be checked with chisq.test 
+bank_full <- read.csv("D:/R/bank-full.csv", header=TRUE, sep=";")
 
 library("MASS")
 with(bank_full, chisq.test( job, marital))
 
-with(bank_full, table( job, marital) )
+# Result
 
-# OR 
+Pearson's Chi-squared test
 
-with(bank_full, prop.table(table( job,marital)))
+data:  job and marital
+X-squared = 3837.6, df = 22, p-value < 2.2e-16
 
-#<2.2e-16 means 0.00000000000000022. It is (very much) less than 0.05
+
+# <2.2e-16 means 0.00000000000000022. It is (very much) less than 0.05, there is relation between Job and Marital Status.
+
 
 
 
@@ -64,14 +58,16 @@ d. Check whether is there any association between Job and Education?
 
 As both are a categorical variable this can be checked with chisq.test 
 
-library("MASS")
+bank_full <- read.csv("D:/R/bank-full.csv", header=TRUE, sep=";")
 
+library("MASS")
 with(bank_full, chisq.test( job,education))
 
-with(bank_full, table( job, education) )
+# Result
 
-# OR 
+Pearson's Chi-squared test
 
-with(bank_full, prop.table(table( job,education)))
+data:  job and education
+X-squared = 28483, df = 33, p-value < 2.2e-16
 
-#<2.2e-16 means 0.00000000000000022. It is (very much) less than 0.05
+# <2.2e-16 means 0.00000000000000022. It is (very much) less than 0.05, there is relation between Job and Education.
